@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -9,15 +10,37 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         // Check if user is logged in on mount
-        const user = localStorage.getItem('user');
-        if (user) {
-            setUser(JSON.parse(user));
-            setIsAuthenticated(true);
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            try {
+                const userData = JSON.parse(storedUser);
+                // Verify stored credentials with a test API call
+                api.get('/tasks/')
+                    .then(() => {
+                        setUser(userData);
+                        setIsAuthenticated(true);
+                    })
+                    .catch(() => {
+                        // If credentials are invalid, clear them
+                        localStorage.removeItem('user');
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
+            } catch (error) {
+                // If stored data is invalid, clear it
+                localStorage.removeItem('user');
+                setLoading(false);
+            }
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
     }, []);
 
     const login = (userData) => {
+        if (!userData.username || !userData.password) {
+            throw new Error('Invalid login data');
+        }
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
         setIsAuthenticated(true);
@@ -27,6 +50,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
         setUser(null);
         setIsAuthenticated(false);
+        window.location.href = '/'; // Redirect to login
     };
 
     if (loading) {

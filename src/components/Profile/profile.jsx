@@ -181,13 +181,9 @@ const Profile = () => {
           <div className="profile-header">
             <div className="header-left">
               <h1 className="welcome-title">Welcome, {currentData.nickName || currentData.fullName.split(' ')[0]}</h1>
-              <p className="header-date">{formatDate()}</p>
             </div>
+              <p className="header-date">{formatDate()}</p>
             <div className="header-right">
-              <div className="search-container">
-                <input type="text" placeholder="Search" className="search-input" />
-              </div>
-              <div className="notification-icon">🔔</div>
               <div className="user-avatar-header">
                 {currentData.profileImage ? (
                   <img src={currentData.profileImage} alt="Profile" className="avatar-img" />
@@ -266,7 +262,7 @@ const Profile = () => {
                 <div className="form-group">
                   <label className="form-label">
                     <FaUser className="label-icon" />
-                    Nick Name
+                    email
                   </label>
                   {isEditing ? (
                     <input
@@ -274,7 +270,7 @@ const Profile = () => {
                       value={editData.nickName}
                       onChange={(e) => handleInputChange('nickName', e.target.value)}
                       className="form-input"
-                      placeholder="Your Nick Name"
+                      placeholder="Your email"
                     />
                   ) : (
                     <div className="form-display">{currentData.nickName}</div>
@@ -382,69 +378,6 @@ const Profile = () => {
                     <div className="form-display">{currentData.timeZone}</div>
                   )}
                 </div>
-              </div>
-
-              {/* Email Addresses Section */}
-              <div className="email-section">
-                <div className="section-header">
-                  <h3 className="section-title">
-                    <FaEnvelope className="section-icon" />
-                    My Email Addresses
-                  </h3>
-                </div>
-                <div className="email-list">
-                  {currentData.emailAddresses.map((emailObj) => (
-                    <div key={emailObj.id} className="email-item">
-                      <div className="email-icon">
-                        <FaEnvelope />
-                      </div>
-                      <div className="email-details">
-                        <div className="email-address">{emailObj.email}</div>
-                        <div className="email-date">{emailObj.addedDate}</div>
-                        {emailObj.isPrimary && <span className="primary-badge">Primary</span>}
-                      </div>
-                      {!emailObj.isPrimary && (
-                        <button 
-                          className="remove-email-btn"
-                          onClick={() => removeEmail(emailObj.id)}
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                
-                {showAddEmail ? (
-                  <div className="add-email-form">
-                    <input
-                      type="email"
-                      value={newEmail}
-                      onChange={(e) => setNewEmail(e.target.value)}
-                      placeholder="Enter new email address"
-                      className="add-email-input"
-                    />
-                    <button className="add-email-save" onClick={handleAddEmail}>
-                      Add
-                    </button>
-                    <button 
-                      className="add-email-cancel" 
-                      onClick={() => {
-                        setShowAddEmail(false);
-                        setNewEmail("");
-                      }}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <button 
-                    className="add-email-btn"
-                    onClick={() => setShowAddEmail(true)}
-                  >
-                    + Add Email Address
-                  </button>
-                )}
               </div>
             </div>
           </div>

@@ -11,11 +11,23 @@ const api = axios.create({
 // Login function
 const login = async (username, password) => {
     try {
+        // Create Basic Auth header
+        const credentials = btoa(`${username}:${password}`);
+        const headers = {
+            'Authorization': `Basic ${credentials}`
+        };
+
+        // Login request
         const response = await axios.post('http://localhost:8000/api/login/', {
             username,
             password,
-        });
-        return response.data;
+        }, { headers });
+
+        // Return response with credentials for storage
+        return {
+            ...response.data,
+            password, // Store password for Basic Auth
+        };
     } catch (error) {
         throw error;
     }
@@ -40,9 +52,8 @@ api.interceptors.request.use(
     (config) => {
         const user = localStorage.getItem('user');
         if (user) {
-            // Add auth header with Base64 encoded credentials
-            const { username, password } = JSON.parse(user);
-            const credentials = btoa(`${username}:${password}`);
+            const userData = JSON.parse(user);
+            const credentials = btoa(`${userData.username}:${userData.password}`);
             config.headers.Authorization = `Basic ${credentials}`;
         }
         return config;
@@ -57,7 +68,8 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            // Redirect to login page on authentication error
+            // Remove invalid credentials and redirect to login
+            localStorage.removeItem('user');
             window.location.href = '/';
         }
         return Promise.reject(error);

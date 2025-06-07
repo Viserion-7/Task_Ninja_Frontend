@@ -52,9 +52,14 @@ const TodoTasks = () => {
         is_completed: !task.is_completed
       });
       
+      // Update tasks list
       setTasks(prevTasks => prevTasks.map(t =>
         t.id === id ? updatedTask : t
       ));
+
+      // Refetch tasks to ensure proper update
+      const tasksData = await taskService.getAllTasks();
+      setTasks(tasksData);
     } catch (err) {
       console.error('Error updating task:', err);
       setError('Failed to update task');
@@ -74,14 +79,21 @@ const TodoTasks = () => {
   };
 
   const startEditing = (task) => {
-    setEditingTask({ ...task });
+    setEditingTask({
+      ...task,
+      due_date: task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : ''
+    });
   };
 
   const saveEdit = async () => {
     try {
+      // Set time to 9 AM for the selected date
+      const dueDate = new Date(editingTask.due_date);
+      dueDate.setHours(9, 0, 0, 0);
+      
       const updatedTask = await taskService.updateTask(editingTask.id, {
         ...editingTask,
-        due_date: new Date(editingTask.due_date).toISOString()
+        due_date: dueDate.toISOString()
       });
       
       setTasks(prevTasks => prevTasks.map(task =>
@@ -99,16 +111,16 @@ const TodoTasks = () => {
     setEditingTask(null);
   };
 
-  const getDaysUntilDue = (dueDate) => {
-    if (!dueDate) return null;
+  const getDaysUntilDue = (due_date) => {
+    if (!due_date) return null;
     const today = new Date();
-    const due = new Date(dueDate);
+    const due = new Date(due_date);
     const diffTime = due - today;
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const getTaskStatus = (task) => {
-    const daysUntil = getDaysUntilDue(task.dueDate);
+    const daysUntil = getDaysUntilDue(task.due_date);
     if (daysUntil === null) return "no-date";
     if (daysUntil < 0) return "overdue";
     if (daysUntil === 0) return "due-today";
@@ -117,33 +129,46 @@ const TodoTasks = () => {
   };
 
   const filterTasks = () => {
-    let filtered = tasks.filter(task => !task.completed);
+    let filtered = tasks.filter(task => !task.is_completed);
 
     if (searchTerm) {
       filtered = filtered.filter(task =>
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (task.description && task.description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
     const today = new Date().toISOString().split("T")[0];
     if (filter === "today") {
-      filtered = filtered.filter((t) => t.dueDate === today);
+      filtered = filtered.filter((t) => {
+        const taskDate = t.due_date ? new Date(t.due_date).toISOString().split('T')[0] : null;
+        return taskDate === today;
+      });
     } else if (filter === "overdue") {
-      filtered = filtered.filter((t) => t.dueDate && t.dueDate < today);
+      filtered = filtered.filter((t) => {
+        const taskDate = t.due_date ? new Date(t.due_date).toISOString().split('T')[0] : null;
+        return taskDate && taskDate < today;
+      });
     } else if (filter === "upcoming") {
-      filtered = filtered.filter((t) => t.dueDate && t.dueDate > today);
+      filtered = filtered.filter((t) => {
+        const taskDate = t.due_date ? new Date(t.due_date).toISOString().split('T')[0] : null;
+        return taskDate && taskDate > today;
+      });
     } else if (filter === "high-priority") {
-      filtered = filtered.filter((t) => t.priority === "high");
+      filtered = filtered.filter((t) => t.priority === "High");
     }
 
     if (sortBy === "priority") {
-      const order = { high: 1, medium: 2, low: 3 };
+      const order = { High: 1, Normal: 2, Low: 3 };
       filtered.sort((a, b) => order[a.priority] - order[b.priority]);
     } else if (sortBy === "due-date") {
-      filtered.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+      filtered.sort((a, b) => {
+        if (!a.due_date) return 1;
+        if (!b.due_date) return -1;
+        return new Date(a.due_date) - new Date(b.due_date);
+      });
     } else {
-      filtered.sort((a, b) => b.createdAt - a.createdAt);
+      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
     return filtered;
@@ -151,28 +176,25 @@ const TodoTasks = () => {
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case "high": return "#ff4757";
-      case "medium": return "#ffa502";
-      case "low": return "#2ed573";
+      case "High": return "#ff4757";
+      case "Normal": return "#ffa502";
+      case "Low": return "#2ed573";
       default: return "#747d8c";
     }
   };
 
   const renderTaskCard = (task) => {
     const status = getTaskStatus(task);
-    const daysUntil = getDaysUntilDue(task.dueDate);
+    const daysUntil = getDaysUntilDue(task.due_date);
 
     return (
       <div key={task.id} className={`todo-card ${status}`}>
         <div className="todo-card-header">
           <div className="priority-indicator" style={{ backgroundColor: getPriorityColor(task.priority) }}>
-            {task.priority.charAt(0).toUpperCase()}
+            {task.priority.charAt(0)}
           </div>
           <div className="task-category">
-            {task.categories?.length > 0 
-              ? task.categories.map(cat => cat.name).join(', ') 
-              : "General"
-            }
+            {task.category_name || "General"}
           </div>
           <div className="task-actions">
             <button className="action-btn edit" onClick={() => startEditing(task)}><FaEdit /></button>
@@ -189,7 +211,15 @@ const TodoTasks = () => {
         <div className="todo-card-footer">
           <div className="task-date">
             <FaCalendar className="date-icon" />
-            <span>{task.dueDate || "No due date"}</span>
+            <span>
+              {task.due_date ? new Date(task.due_date).toLocaleString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              }) : "No due date"}
+            </span>
             {status === "overdue" && <FaExclamationTriangle className="warning-icon" />}
             {status === "due-today" && <FaClock className="clock-icon" />}
           </div>
@@ -206,10 +236,17 @@ const TodoTasks = () => {
   };
 
   const stats = (() => {
-    const incomplete = tasks.filter(t => !t.completed);
-    const high = incomplete.filter(t => t.priority === "high").length;
-    const overdue = incomplete.filter(t => t.dueDate && t.dueDate < new Date().toISOString().split("T")[0]).length;
-    const dueToday = incomplete.filter(t => t.dueDate === new Date().toISOString().split("T")[0]).length;
+    const incomplete = tasks.filter(t => !t.is_completed);
+    const high = incomplete.filter(t => t.priority === "High").length;
+    const today = new Date().toISOString().split("T")[0];
+    const overdue = incomplete.filter(t => {
+      const taskDate = t.due_date ? new Date(t.due_date).toISOString().split('T')[0] : null;
+      return taskDate && taskDate < today;
+    }).length;
+    const dueToday = incomplete.filter(t => {
+      const taskDate = t.due_date ? new Date(t.due_date).toISOString().split('T')[0] : null;
+      return taskDate === today;
+    }).length;
     return { total: incomplete.length, high, overdue, dueToday };
   })();
 
@@ -223,7 +260,7 @@ const TodoTasks = () => {
         <div className="nav-menu">
           <div className="nav-item"><span className="nav-icon">📊</span><button className="nav-text" onClick={() => navigate("/dashboard")}>Dashboard</button></div>
           <div className="nav-item"><span className="nav-icon">📝</span><button className="nav-text" onClick={() => navigate("/add-task")}>Add Task</button></div>
-          <div className="nav-item"><span className="nav-icon">✓</span><span className="nav-text">To Do</span></div>
+          <div className="nav-item active"><span className="nav-icon">✓</span><span className="nav-text">To Do</span></div>
           <div className="nav-item"><span className="nav-icon">⚙️</span><button className="nav-text" onClick={() => navigate("/profile")}>Settings</button></div>
         </div>
         <div className="sidebar-actions">
@@ -295,13 +332,13 @@ const TodoTasks = () => {
               <button className="close-btn" onClick={cancelEdit}>×</button>
             </div>
             <div className="modal-content">
-              <input type="text" value={editingTask.title} onChange={(e) => setEditingTask({ ...editingTask, title: e.target.value })} className="edit-input" />
-              <textarea value={editingTask.description} onChange={(e) => setEditingTask({ ...editingTask, description: e.target.value })} className="edit-textarea" />
-              <input type="date" value={editingTask.dueDate} onChange={(e) => setEditingTask({ ...editingTask, dueDate: e.target.value })} className="edit-input" />
+              <input type="text" value={editingTask.title} onChange={(e) => setEditingTask({ ...editingTask, title: e.target.value })} className="edit-input" placeholder="Task Title" />
+              <textarea value={editingTask.description} onChange={(e) => setEditingTask({ ...editingTask, description: e.target.value })} className="edit-textarea" placeholder="Task Description" />
+              <input type="date" value={editingTask.due_date} onChange={(e) => setEditingTask({ ...editingTask, due_date: e.target.value })} className="edit-input" />
               <select value={editingTask.priority} onChange={(e) => setEditingTask({ ...editingTask, priority: e.target.value })} className="edit-select">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="Low">Low</option>
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
               </select>
             </div>
             <div className="modal-actions">
