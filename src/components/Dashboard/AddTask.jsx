@@ -236,7 +236,7 @@ const AddTask = () => {
       {/* Left sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
+          <h1>TASK<span className="logo-highlight">Y.</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -279,6 +279,20 @@ const AddTask = () => {
             <div className="app-branding">
               <h1 className="app-title">AI Task Manager</h1>
               <p className="app-subtitle">Your intelligent productivity companion</p>
+            </div>
+            <div className="app-controls">
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                className="search-input"
+              />
+              <button
+                onClick={() => setShowAISuggestions((prev) => !prev)}
+                className="ai-button"
+              >
+                <FaRobot />
+                <span>AI Suggestions</span>
+              </button>
             </div>
           </header>
 
