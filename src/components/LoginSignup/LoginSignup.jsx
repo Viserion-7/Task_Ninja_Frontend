@@ -1,48 +1,66 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login, register } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import "./LoginSignup.css";
 
 const LoginSignup = () => {
   const [isSignup, setIsSignup] = useState(false);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const { login: authLogin } = useAuth();
+  
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const validUser = users.find(user => user.email === email && user.password === password);
-
-    if (validUser) {
-      localStorage.setItem("auth", JSON.stringify(validUser)); //  Store logged-in user
-      navigate("/dashboard"); //  Redirect
-    } else {
-      alert("Invalid credentials. Try again or sign up.");
+    try {
+      const userData = await login(username, password);
+      authLogin(userData);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.error || "Invalid credentials. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    if (!email || !password) {
-      alert("Please fill in all fields!");
+    if (!username || !email || !password) {
+      setError("Please fill in all fields!");
+      setLoading(false);
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.find(user => user.email === email);
-
-    if (userExists) {
-      alert("User already exists! Please log in.");
-      return;
+    try {
+      // Register the user
+      await register(username, email, password);
+      
+      // Log them in automatically
+      const userData = await login(username, password);
+      authLogin(userData);
+      navigate("/dashboard");
+    } catch (err) {
+      if (err.response?.data?.username) {
+        setError("Username already exists!");
+      } else if (err.response?.data?.email) {
+        setError("Email already exists!");
+      } else {
+        setError("An error occurred during signup. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
-
-    const newUser = { email, password };
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    alert("Signup successful! Please log in.");
-    setIsSignup(false);
   };
 
   return (
@@ -65,14 +83,15 @@ const LoginSignup = () => {
           </div>
 
           <div className="form-inner">
+            {error && <div className="error-message">{error}</div>}
             {!isSignup ? (
               <form onSubmit={handleLogin} className="login">
                 <div className="field">
                   <input
                     type="text"
-                    placeholder="Email Address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required
                   />
                 </div>
@@ -86,7 +105,13 @@ const LoginSignup = () => {
                   />
                 </div>
                 <div className="pass-link"><a href="#">Forgot password?</a></div>
-                <div className="field btn"><input type="submit" value="Login" /></div>
+                <div className="field btn">
+                  <input 
+                    type="submit" 
+                    value={loading ? "Loading..." : "Login"} 
+                    disabled={loading}
+                  />
+                </div>
                 <div className="signup-link">
                   Not a member? <a href="#" onClick={() => setIsSignup(true)}>Signup now</a>
                 </div>
@@ -96,6 +121,15 @@ const LoginSignup = () => {
                 <div className="field">
                   <input
                     type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <input
+                    type="email"
                     placeholder="Email Address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -118,7 +152,13 @@ const LoginSignup = () => {
                     required
                   />
                 </div>
-                <div className="field btn"><input type="submit" value="Signup" /></div>
+                <div className="field btn">
+                  <input 
+                    type="submit" 
+                    value={loading ? "Loading..." : "Signup"} 
+                    disabled={loading}
+                  />
+                </div>
               </form>
             )}
           </div>

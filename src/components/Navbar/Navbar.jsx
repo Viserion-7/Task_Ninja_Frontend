@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="logo">
-        <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
       </div>
 
       <div className="nav-menu">
@@ -16,10 +16,6 @@ const Sidebar = () => {
         <div className="nav-item">
           <span className="nav-icon">📈</span>
           <span className="nav-text">Analytic</span>
-        </div>
-        <div className="nav-item">
-          <span className="nav-icon">⏱️</span>
-          <span className="nav-text">Timesheets</span>
         </div>
         <div className="nav-item">
           <span className="nav-icon">✓</span>
@@ -35,12 +31,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="workspace-selector">
-        <div className="workspace-label">Workspace</div>
-        <div className="workspace-value">
-          Matrix Domain <span className="dropdown-icon">▼</span>
-        </div>
-      </div>
     </div>
   );
 };

@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import { useNavigate } from "react-router-dom";
+import taskService from '../../services/taskService';
+import { useAuth } from '../../context/AuthContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isTracking, setIsTracking] = useState(false);
   const [trackedTime, setTrackedTime] = useState(0);
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Load tasks from localStorage
+  // Load tasks from API
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    setTasks(storedTasks);
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const tasksData = await taskService.getAllTasks();
+        setTasks(tasksData);
+      } catch (err) {
+        console.error('Error fetching tasks:', err);
+        setError('Failed to load tasks');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
   }, []);
 
   const formattedDate = () => {
@@ -51,8 +68,8 @@ const Dashboard = () => {
   };
 
   // Compute stats from tasks
-  const completedCount = tasks.filter(t => t.completed).length;
-  const activeTasks = tasks.filter(t => !t.completed);
+  const completedCount = tasks.filter(t => t.is_completed).length;
+  const activeTasks = tasks.filter(t => !t.is_completed);
   const weeklyActivity = tasks.length > 0 ? Math.floor((completedCount / tasks.length) * 100) : 0;
 
   return (
@@ -60,7 +77,7 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -72,11 +89,6 @@ const Dashboard = () => {
           <div className="nav-item">
             <span className="nav-icon">📝</span>
             <button className="nav-text" onClick={() => navigate("/add-task")}>Add Task</button>
-          </div>
-
-          <div className="nav-item">
-            <span className="nav-icon">⏱️</span>
-            <span className="nav-text">Timesheets</span>
           </div>
 
           <div className="nav-item">
@@ -92,17 +104,7 @@ const Dashboard = () => {
 
         <div className="sidebar-actions">
           <button className="sidebar-btn" onClick={() => navigate("/add-task")}>+ Add Task</button>
-          <button className="sidebar-btn logout" onClick={() => {
-            localStorage.removeItem("auth");
-            navigate("/");
-          }}>Logout</button>
-        </div>
-
-        <div className="workspace-selector">
-          <div className="workspace-label">Workspace</div>
-          <div className="workspace-value">
-            Matrix Domain <span className="dropdown-icon">▼</span>
-          </div>
+          <button className="sidebar-btn logout" onClick={logout}>Logout</button>
         </div>
       </div>
 
@@ -112,6 +114,8 @@ const Dashboard = () => {
           <div className="header-left">
             <button className="menu-toggle">☰</button>
             <h2 className="header-title">Dashboard</h2>
+            {error && <div className="error-message">{error}</div>}
+            {loading && <div className="loading-message">Loading tasks...</div>}
           </div>
           <div className="header-center">
             <div className="search-box">
@@ -192,10 +196,10 @@ const Dashboard = () => {
                   <div className="project-item" key={task.id}>
                     <div className="project-icon">📁</div>
                     <div className="project-name">{task.title}</div>
-                    <div className="project-time">{task.dueDate || "No due date"}</div>
+                    <div className="project-time">{task.due_date || "No due date"}</div>
                     <div className="project-progress">
                       <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: task.completed ? "100%" : "10%" }}></div>
+                        <div className="progress-fill" style={{ width: task.is_completed ? "100%" : "10%" }}></div>
                       </div>
                     </div>
                   </div>

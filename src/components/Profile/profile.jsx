@@ -136,7 +136,7 @@ const Profile = () => {
       {/* Left sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -149,12 +149,6 @@ const Profile = () => {
             <span className="nav-icon">📝</span>
             <button className="nav-text" onClick={() => navigate("/add-task")}>Add Task</button>
           </div>
-
-          <div className="nav-item">
-            <span className="nav-icon">⏱️</span>
-            <span className="nav-text">Timesheets</span>
-          </div>
-
           <div className="nav-item">
             <span className="nav-icon">✓</span>
             <button className="nav-text" onClick={() => navigate("/todo")}>To Do</button>
@@ -178,13 +172,6 @@ const Profile = () => {
           </button>
         </div>
 
-        <div className="workspace-selector">
-          <div className="workspace-label">Workspace</div>
-          <div className="workspace-value">
-            Matrix Domain
-            <span className="dropdown-icon">▼</span>
-          </div>
-        </div>
       </div>
 
       {/* Main content */}
