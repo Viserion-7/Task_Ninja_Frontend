@@ -256,12 +256,12 @@ const TodoTasks = () => {
     <div className="app-container">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="logo"><h1>TASK<span className="logo-highlight">Y.</span></h1></div>
+        <div className="logo"><h1>TASK<span className="logo-highlight"> NINJA</span></h1></div>
         <div className="nav-menu">
           <div className="nav-item"><span className="nav-icon">📊</span><button className="nav-text" onClick={() => navigate("/dashboard")}>Dashboard</button></div>
           <div className="nav-item"><span className="nav-icon">📝</span><button className="nav-text" onClick={() => navigate("/add-task")}>Add Task</button></div>
           <div className="nav-item active"><span className="nav-icon">✓</span><span className="nav-text">To Do</span></div>
-          <div className="nav-item"><span className="nav-icon">⚙️</span><button className="nav-text" onClick={() => navigate("/profile")}>Settings</button></div>
+          <div className="nav-item"><span className="nav-icon">👨🏻‍💼</span><button className="nav-text" onClick={() => navigate("/profile")}>Profile</button></div>
         </div>
         <div className="sidebar-actions">
           <button className="sidebar-btn" onClick={() => navigate("/add-task")}>+ Add Task</button>

@@ -77,7 +77,7 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -97,8 +97,8 @@ const Dashboard = () => {
           </div>
 
           <div className="nav-item">
-            <span className="nav-icon">⚙️</span>
-            <button className="nav-text" onClick={() => navigate("/profile")}>Settings</button>
+            <span className="nav-icon">👨🏻‍💼</span>
+            <button className="nav-text" onClick={() => navigate("/profile")}>Profile</button>
           </div>
         </div>
 
@@ -116,25 +116,6 @@ const Dashboard = () => {
             <h2 className="header-title">Dashboard</h2>
             {error && <div className="error-message">{error}</div>}
             {loading && <div className="loading-message">Loading tasks...</div>}
-          </div>
-          <div className="header-center">
-            <div className="search-box">
-              <input type="text" placeholder="Search Project..." />
-              <button className="search-btn">🔍</button>
-            </div>
-          </div>
-          <div className="header-right">
-            <div className="notification">
-              <span className="notification-icon">🔔</span>
-              <span className="notification-badge">3</span>
-            </div>
-            <div className="user-profile">
-              <div className="user-info">
-                <div className="user-name">Manjay Gupta</div>
-                <div className="user-role">Web Designer</div>
-              </div>
-              <div className="user-avatar">MG</div>
-            </div>
           </div>
         </div>
 

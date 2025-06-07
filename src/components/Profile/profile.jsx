@@ -1,7 +1,7 @@
 // src/components/Profile/Profile.jsx
 
 import React, { useState, useEffect } from "react";
-import { FaEdit, FaCamera, FaEnvelope, FaUser, FaGlobe, FaClock, FaLanguage, FaVenusMars } from "react-icons/fa";
+import { FaCamera, FaGlobe, FaClock, FaLanguage, FaVenusMars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import './profile.css';
 
@@ -9,26 +9,16 @@ const Profile = () => {
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isEditing, setIsEditing] = useState(false);
-  const [showAddEmail, setShowAddEmail] = useState(false);
-  const [newEmail, setNewEmail] = useState("");
 
   const [profileData, setProfileData] = useState({
-    fullName: "Alexa Rawles",
-    nickName: "Alex",
-    email: "alexarawles@gmail.com",
-    gender: "Female",
-    country: "United States",
+    fullName: "Harigovind CB",
+    nickName: "Viserion",
+    email: "reach.viserion@gmail.com",
+    gender: "Male",
+    country: "India",
     language: "English",
-    timeZone: "UTC-5 (Eastern Time)",
+    timeZone: "Asia/Kolkata",
     profileImage: null,
-    emailAddresses: [
-      {
-        id: 1,
-        email: "alexarawles@gmail.com",
-        addedDate: "1 month ago",
-        isPrimary: true
-      }
-    ]
   });
 
   const [editData, setEditData] = useState({ ...profileData });
@@ -74,52 +64,6 @@ const Profile = () => {
     }
   };
 
-  const handleAddEmail = () => {
-    if (newEmail && newEmail.includes('@')) {
-      const newEmailObj = {
-        id: Date.now(),
-        email: newEmail,
-        addedDate: "Just now",
-        isPrimary: false
-      };
-      
-      if (isEditing) {
-        setEditData(prev => ({
-          ...prev,
-          emailAddresses: [...prev.emailAddresses, newEmailObj]
-        }));
-      } else {
-        setProfileData(prev => ({
-          ...prev,
-          emailAddresses: [...prev.emailAddresses, newEmailObj]
-        }));
-      }
-      
-      setNewEmail("");
-      setShowAddEmail(false);
-    }
-  };
-
-  const removeEmail = (emailId) => {
-    const emailToRemove = profileData.emailAddresses.find(e => e.id === emailId);
-    if (emailToRemove && emailToRemove.isPrimary) {
-      alert("Cannot remove primary email address");
-      return;
-    }
-
-    if (isEditing) {
-      setEditData(prev => ({
-        ...prev,
-        emailAddresses: prev.emailAddresses.filter(e => e.id !== emailId)
-      }));
-    } else {
-      setProfileData(prev => ({
-        ...prev,
-        emailAddresses: prev.emailAddresses.filter(e => e.id !== emailId)
-      }));
-    }
-  };
-
   const currentData = isEditing ? editData : profileData;
 
   const getInitials = (name) => {
@@ -136,7 +80,7 @@ const Profile = () => {
       {/* Left sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -155,8 +99,8 @@ const Profile = () => {
           </div>
 
           <div className="nav-item active">
-            <span className="nav-icon">⚙️</span>
-            <span className="nav-text">Settings</span>
+            <span className="nav-icon">👨🏻‍💼</span>
+            <span className="nav-text">Profile</span>
           </div>
         </div>
 
@@ -182,8 +126,8 @@ const Profile = () => {
             <div className="header-left">
               <h1 className="welcome-title">Welcome, {currentData.nickName || currentData.fullName.split(' ')[0]}</h1>
             </div>
-              <p className="header-date">{formatDate()}</p>
             <div className="header-right">
+              <p className="header-date">{formatDate()}</p>
               <div className="user-avatar-header">
                 {currentData.profileImage ? (
                   <img src={currentData.profileImage} alt="Profile" className="avatar-img" />
@@ -208,18 +152,6 @@ const Profile = () => {
                       {getInitials(currentData.fullName)}
                     </div>
                   )}
-                  <div className="avatar-upload-overlay">
-                    <input 
-                      type="file" 
-                      id="avatar-upload" 
-                      accept="image/*" 
-                      onChange={handleImageUpload}
-                      className="avatar-input"
-                    />
-                    <label htmlFor="avatar-upload" className="avatar-upload-btn">
-                      <FaCamera />
-                    </label>
-                  </div>
                 </div>
                 <div className="profile-basic-info">
                   <h2 className="profile-name">{currentData.fullName}</h2>
@@ -241,43 +173,6 @@ const Profile = () => {
 
             {/* Profile Form */}
             <div className="profile-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label className="form-label">
-                    <FaUser className="label-icon" />
-                    Full Name
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editData.fullName}
-                      onChange={(e) => handleInputChange('fullName', e.target.value)}
-                      className="form-input"
-                      placeholder="Your Full Name"
-                    />
-                  ) : (
-                    <div className="form-display">{currentData.fullName}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <label className="form-label">
-                    <FaUser className="label-icon" />
-                    email
-                  </label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editData.nickName}
-                      onChange={(e) => handleInputChange('nickName', e.target.value)}
-                      className="form-input"
-                      placeholder="Your email"
-                    />
-                  ) : (
-                    <div className="form-display">{currentData.nickName}</div>
-                  )}
-                </div>
-              </div>
-
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">
@@ -313,13 +208,13 @@ const Profile = () => {
                     >
                       <option value="">Select Country</option>
                       <option value="United States">United States</option>
-                      <option value="Canada">Canada</option>
                       <option value="United Kingdom">United Kingdom</option>
                       <option value="Australia">Australia</option>
+                      <option value="India">India</option>
                       <option value="Germany">Germany</option>
                       <option value="France">France</option>
                       <option value="Japan">Japan</option>
-                      <option value="India">India</option>
+                      <option value="Russia">Russia</option>
                       <option value="Other">Other</option>
                     </select>
                   ) : (
@@ -342,12 +237,8 @@ const Profile = () => {
                     >
                       <option value="">Select Language</option>
                       <option value="English">English</option>
-                      <option value="Spanish">Spanish</option>
-                      <option value="French">French</option>
                       <option value="German">German</option>
-                      <option value="Chinese">Chinese</option>
                       <option value="Japanese">Japanese</option>
-                      <option value="Portuguese">Portuguese</option>
                       <option value="Russian">Russian</option>
                     </select>
                   ) : (
@@ -366,13 +257,13 @@ const Profile = () => {
                       className="form-select"
                     >
                       <option value="">Select Time Zone</option>
-                      <option value="UTC-5 (Eastern Time)">UTC-5 (Eastern Time)</option>
-                      <option value="UTC-6 (Central Time)">UTC-6 (Central Time)</option>
-                      <option value="UTC-7 (Mountain Time)">UTC-7 (Mountain Time)</option>
-                      <option value="UTC-8 (Pacific Time)">UTC-8 (Pacific Time)</option>
-                      <option value="UTC+0 (GMT)">UTC+0 (GMT)</option>
-                      <option value="UTC+1 (CET)">UTC+1 (CET)</option>
-                      <option value="UTC+9 (JST)">UTC+9 (JST)</option>
+                      <option value="UTC">UTC</option>
+                      <option value="America/New_York">America/New_York</option>
+                      <option value="Europe/London">Europe/London</option>
+                      <option value="Asia/Tokyo">Asia/Tokyo</option>
+                      <option value="Asia/Dubai">Asia/Dubai</option>
+                      <option value="Asia/Kolkata">Asia/Kolkata</option>
+                      <option value="Australia/Sydney">Australia/Sydney</option>
                     </select>
                   ) : (
                     <div className="form-display">{currentData.timeZone}</div>

@@ -236,7 +236,7 @@ const AddTask = () => {
       {/* Left sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h1>TASK<span className="logo-highlight">Y.</span></h1>
+          <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
 
         <div className="nav-menu">
@@ -256,8 +256,8 @@ const AddTask = () => {
           </div>
 
           <div className="nav-item">
-            <span className="nav-icon">⚙️</span>
-            <button className="nav-text" onClick={() => navigate("/profile")}>Settings</button>
+            <span className="nav-icon">👨🏻‍💼</span>
+            <button className="nav-text" onClick={() => navigate("/profile")}>Profile</button>
           </div>
         </div>
 
