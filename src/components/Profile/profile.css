@@ -1,0 +1,496 @@
+/* Profile.css */
+
+/* App Container */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+  color: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.logo h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 32px 0;
+  color: white;
+}
+
+.logo-highlight {
+  color: #3b82f6;
+}
+
+.nav-menu {
+  flex: 1;
+}
+
+/* Shared Button Styles */
+.button {
+  padding: 10px 15px; /* Consistent padding */
+  font-size: 14px; /* Consistent font size */
+  border-radius: 8px; /* Rounded corners */
+  border: none; /* Remove borders */
+  cursor: pointer; /* Pointer cursor */
+  text-align: center; /* Center the text */
+  transition: all 0.2s ease; /* Smooth hover effects */
+}
+.nav-icon {
+  font-size: 18px;
+  margin-right: 12px;
+  width: 20px;
+}
+
+.nav-text {
+  font-size: 14px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.sidebar-actions {
+  margin: 24px 0;
+}
+
+.sidebar-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-btn:not(.logout) {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.sidebar-btn:not(.logout):hover {
+  background-color: #2563eb;
+}
+
+.sidebar-btn.logout {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.sidebar-btn.logout:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+.workspace-selector {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+}
+
+.workspace-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.workspace-value {
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 24px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.welcome-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.header-date {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 200px;
+  background-color: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.notification-icon {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.notification-icon:hover {
+  background-color: #e2e8f0;
+}
+
+.user-avatar-header {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Profile Card */
+.profile-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.profile-card-header {
+  padding: 32px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+}
+
+.profile-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profile-avatar-container {
+  position: relative;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+}
+
+.profile-avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 24px;
+  border: 4px solid white;
+}
+
+.avatar-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.avatar-input {
+  display: none;
+}
+
+.avatar-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border: 2px solid white;
+}
+
+.avatar-upload-btn:hover {
+  background-color: #2563eb;
+}
+
+.profile-basic-info {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.profile-email {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.edit-profile-btn {
+  padding: 12px 24px;
+  border: 2px solid white;
+  border-radius: 8px;
+  background-color: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.edit-profile-btn:hover {
+  background-color: white;
+  color: #3b82f6;
+}
+
+.edit-profile-btn.save {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.edit-profile-btn.save:hover {
+  background-color: #059669;
+  border-color: #059669;
+  color: white;
+}
+
+.cancel-edit-btn {
+  padding: 12px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-edit-btn:hover {
+  border-color: white;
+  color: white;
+}
+
+/* Profile Form */
+.profile-form {
+  padding: 32px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.label-icon {
+  margin-right: 8px;
+  color: #6b7280;
+}
+
+.form-input,
+.form-select {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-display {
+  padding: 12px 16px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  min-height: 20px;
+}
+
+/* Email Section */
+.email-section {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.section-icon {
+  margin-right: 12px;
+  color: #6b7280;
+}
+
+.email-list {
+  margin-bottom: 24px;
+}
+
+.email-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.email-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-right: 16px;
+  font-size: 14px;
+}
+
+.email-details {
+  flex: 1;
+}
+
+.email-address {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.email-date {
+  font-size: 14px;
+  color: #6b7280;}

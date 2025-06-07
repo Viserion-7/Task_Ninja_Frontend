@@ -1,0 +1,33 @@
+.timesheet-container {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .timesheet-container h2 {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .timesheet-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .timesheet-table th, .timesheet-table td {
+    border: 1px solid #ddd;
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+  
+  .timesheet-table th {
+    background-color: #f1f1f1;
+    color: #444;
+  }
+  
+  .timesheet-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }

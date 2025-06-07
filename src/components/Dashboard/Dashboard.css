@@ -51,17 +51,30 @@
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
-.nav-item:hover {
-  background-color: #f0f2f5;
+.nav-item .nav-text {
+  background-color: #078fff; /* Yellow background */
+  color: #fff; /* White text */
+  border: none; /* Remove border */
+  padding: 10px 15px; /* Add padding for a better look */
+  border-radius: 20px; /* Rounded corners */
+  font-size: 14px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: all 0.2s ease; /* Smooth transition for hover effects */
+  text-align: center; /* Center the text */
+  display: inline-block; /* Ensure proper button alignment */
 }
 
-.nav-item.active {
-  background-color: #f7f7f7;
-  font-weight: 600;
-  color: #000;
+/* Hover effect for the Add Task button */
+/* Shared Button Styles */
+.button {
+  padding: 10px 15px; /* Consistent padding */
+  font-size: 14px; /* Consistent font size */
+  border-radius: 8px; /* Rounded corners */
+  border: none; /* Remove borders */
+  cursor: pointer; /* Pointer cursor */
+  text-align: center; /* Center the text */
+  transition: all 0.2s ease; /* Smooth hover effects */
 }
-
 .nav-icon {
   margin-right: 10px;
   font-size: 18px;
