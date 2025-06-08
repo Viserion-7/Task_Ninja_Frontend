@@ -104,7 +104,9 @@ const LoginSignup = () => {
                     required
                   />
                 </div>
-                <div className="pass-link"><a href="#">Forgot password?</a></div>
+                <div className="pass-link">
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#">Forgot password?</a></div>
                 <div className="field btn">
                   <input 
                     type="submit" 
@@ -113,7 +115,9 @@ const LoginSignup = () => {
                   />
                 </div>
                 <div className="signup-link">
-                  Not a member? <a href="#" onClick={() => setIsSignup(true)}>Signup now</a>
+                  Not a member? 
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <a href="#" onClick={() => setIsSignup(true)}>Signup now</a>
                 </div>
               </form>
             ) : (

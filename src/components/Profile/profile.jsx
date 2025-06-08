@@ -1,7 +1,7 @@
 // src/components/Profile/Profile.jsx
 
 import React, { useState, useEffect } from "react";
-import { FaCamera, FaGlobe, FaClock, FaLanguage, FaVenusMars } from "react-icons/fa";
+import { FaGlobe, FaClock, FaLanguage, FaVenusMars } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import './profile.css';
 
@@ -46,22 +46,6 @@ const Profile = () => {
   const handleCancelEdit = () => {
     setEditData({ ...profileData });
     setIsEditing(false);
-  };
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageUrl = e.target.result;
-        if (isEditing) {
-          setEditData(prev => ({ ...prev, profileImage: imageUrl }));
-        } else {
-          setProfileData(prev => ({ ...prev, profileImage: imageUrl }));
-        }
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const currentData = isEditing ? editData : profileData;
