@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaRobot, FaCheckCircle, FaTrashAlt, FaCalendar } from "react-icons/fa";
+import { FaCheckCircle, FaTrashAlt, FaCalendar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import taskService from '../../services/taskService';
 import { useAuth } from '../../context/AuthContext';
@@ -11,7 +11,6 @@ const AddTask = () => {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("priority");
-  const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -280,20 +279,6 @@ const AddTask = () => {
               <h1 className="app-title">AI Task Manager</h1>
               <p className="app-subtitle">Your intelligent productivity companion</p>
             </div>
-            <div className="app-controls">
-              <input
-                type="text"
-                placeholder="Search tasks..."
-                className="search-input"
-              />
-              <button
-                onClick={() => setShowAISuggestions((prev) => !prev)}
-                className="ai-button"
-              >
-                <FaRobot />
-                <span>AI Suggestions</span>
-              </button>
-            </div>
           </header>
 
           <div className="main-grid">
@@ -396,19 +381,6 @@ const AddTask = () => {
               <div className="task-list">{renderTasks()}</div>
             </div>
           </div>
-
-          {/* AI Suggestion Panel */}
-          {showAISuggestions && (
-            <div className="ai-suggestions">
-              <h3 className="suggestions-title">AI Suggestions</h3>
-              <p className="suggestion-item">
-                You have 3 high priority tasks. Focus on them.
-              </p>
-              <p className="suggestion-item">
-                "Complete project report" has been pending. Want to reschedule?
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>
