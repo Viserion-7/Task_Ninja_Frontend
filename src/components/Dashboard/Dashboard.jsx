@@ -148,15 +148,6 @@ const Dashboard = () => {
             </div>
             <div className="stat-card">
               <div className="stat-header">
-                <div className="stat-title">Worked This Week</div>
-              </div>
-              <div className="stat-content">
-                <div className="stat-value">{formatTime(trackedTime)}</div>
-                <div className="stat-icon time-icon">⏱️</div>
-              </div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-header">
                 <div className="stat-title">Tasks Added</div>
               </div>
               <div className="stat-content">
@@ -181,26 +172,6 @@ const Dashboard = () => {
                     <div className="project-progress">
                       <div className="progress-bar">
                         <div className="progress-fill" style={{ width: task.is_completed ? "100%" : "10%" }}></div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="section-card">
-              <div className="section-header">
-                <div className="section-title">To Do</div>
-              </div>
-              <div className="todos-list">
-                {activeTasks.map(todo => (
-                  <div className="todo-item" key={todo.id}>
-                    <div className="todo-icon">📋</div>
-                    <div className="todo-name">{todo.title}</div>
-                    <div className="todo-time">{todo.dueDate || "No date"}</div>
-                    <div className="todo-progress">
-                      <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: "0%" }}></div>
                       </div>
                     </div>
                   </div>

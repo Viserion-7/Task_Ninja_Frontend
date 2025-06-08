@@ -285,8 +285,6 @@ const TodoTasks = () => {
         {/* Stats */}
         <div className="stats-grid">
           <div className="stat-card total"><div className="stat-icon">📋</div><div className="stat-content"><div className="stat-number">{stats.total}</div><div className="stat-label">Total Tasks</div></div></div>
-          <div className="stat-card high-priority"><div className="stat-icon">🔥</div><div className="stat-content"><div className="stat-number">{stats.high}</div><div className="stat-label">High Priority</div></div></div>
-          <div className="stat-card overdue"><div className="stat-icon">⚠️</div><div className="stat-content"><div className="stat-number">{stats.overdue}</div><div className="stat-label">Overdue</div></div></div>
           <div className="stat-card due-today"><div className="stat-icon">⏰</div><div className="stat-content"><div className="stat-number">{stats.dueToday}</div><div className="stat-label">Due Today</div></div></div>
         </div>
 
