@@ -1,60 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import './Dashboard.css';
-import { useNavigate } from "react-router-dom";
-import taskService from '../../services/taskService';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import taskService from '../../services/taskService';
+import { Toast, ToastContainer } from '../Toast/Toast';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isTracking, setIsTracking] = useState(false);
-  const [trackedTime, setTrackedTime] = useState(0);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [overdueTasks, setOverdueTasks] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+  const [currentOverdueTask, setCurrentOverdueTask] = useState(null);
 
-  // Load tasks from API
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        setLoading(true);
-        const tasksData = await taskService.getAllTasks();
-        setTasks(tasksData);
-      } catch (err) {
-        console.error('Error fetching tasks:', err);
-        setError('Failed to load tasks');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
+  // Format helpers
   const formattedDate = () => {
     const options = { weekday: 'short', day: 'numeric', year: 'numeric' };
     return new Date().toLocaleDateString('en-US', options).replace(',', '');
   };
 
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  useEffect(() => {
-    let interval;
-    if (isTracking) {
-      interval = setInterval(() => {
-        setTrackedTime(prev => prev + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isTracking]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,13 +31,70 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const toggleTimeTracking = () => {
-    setIsTracking(!isTracking);
+  // Fetch tasks
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const data = await taskService.getAllTasks();
+      setTasks(data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching tasks:', err);
+      setError('Failed to load tasks');
+      setLoading(false);
+    }
   };
 
-  // Compute stats from tasks
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // Check overdue tasks
+  useEffect(() => {
+    const overdueList = tasks.filter(task =>
+      taskService.isTaskOverdue(task) && !task.is_completed
+    );
+    setOverdueTasks(overdueList);
+
+    if (overdueList.length > 0 && !currentOverdueTask) {
+      setCurrentOverdueTask(overdueList[0]);
+      setShowToast(true);
+    }
+  }, [tasks, currentOverdueTask]);
+
+  const handleReschedule = async () => {
+    if (!currentOverdueTask) return;
+
+    try {
+      await taskService.rescheduleTask(currentOverdueTask.id);
+      const updatedOverdue = overdueTasks.filter(task => task.id !== currentOverdueTask.id);
+      setOverdueTasks(updatedOverdue);
+
+      if (updatedOverdue.length > 0) {
+        setCurrentOverdueTask(updatedOverdue[0]);
+      } else {
+        setCurrentOverdueTask(null);
+        setShowToast(false);
+      }
+
+      fetchTasks();
+    } catch (err) {
+      setError('Failed to reschedule task');
+    }
+  };
+
+  const handleCloseToast = () => {
+    const currentIndex = overdueTasks.findIndex(task => task.id === currentOverdueTask.id);
+    if (currentIndex < overdueTasks.length - 1) {
+      setCurrentOverdueTask(overdueTasks[currentIndex + 1]);
+    } else {
+      setShowToast(false);
+      setCurrentOverdueTask(null);
+    }
+  };
+
+  // Stats
   const completedCount = tasks.filter(t => t.is_completed).length;
-  const activeTasks = tasks.filter(t => !t.is_completed);
   const weeklyActivity = tasks.length > 0 ? Math.floor((completedCount / tasks.length) * 100) : 0;
 
   return (
@@ -79,31 +104,25 @@ const Dashboard = () => {
         <div className="logo">
           <h1>TASK<span className="logo-highlight"> NINJA</span></h1>
         </div>
-
         <div className="nav-menu">
           <div className="nav-item active">
             <span className="nav-icon">📊</span>
             <span className="nav-text">Dashboard</span>
           </div>
-
           <div className="nav-item">
             <span className="nav-icon">📝</span>
             <button className="nav-text" onClick={() => navigate("/add-task")}>Add Task</button>
           </div>
-
           <div className="nav-item">
             <span className="nav-icon">✓</span>
             <button className="nav-text" onClick={() => navigate("/todo")}>To Do</button>
           </div>
-
           <div className="nav-item">
             <span className="nav-icon">👨🏻‍💼</span>
             <button className="nav-text" onClick={() => navigate("/profile")}>Profile</button>
           </div>
         </div>
-
         <div className="sidebar-actions">
-          <button className="sidebar-btn" onClick={() => navigate("/add-task")}>+ Add Task</button>
           <button className="sidebar-btn logout" onClick={logout}>Logout</button>
         </div>
       </div>
@@ -119,37 +138,25 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Today section */}
         <div className="today-section">
           <div className="today-header">
             <div className="today-title">
               <h1>Today</h1>
               <div className="today-date">{formattedDate()} | {currentTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</div>
             </div>
-            <div className="time-tracker">
-              <div className="tracker-text">{isTracking ? "Tracking Time..." : "Start Time Tracker"}</div>
-              <div className="tracked-time">{formatTime(trackedTime)}</div>
-              <button className="tracker-btn" onClick={toggleTimeTracking}>
-                {isTracking ? "⏸" : "▶"}
-              </button>
-            </div>
           </div>
 
           {/* Stats */}
           <div className="stats-grid">
             <div className="stat-card">
-              <div className="stat-header">
-                <div className="stat-title">Weekly Activity</div>
-              </div>
+              <div className="stat-header"><div className="stat-title">Weekly Activity</div></div>
               <div className="stat-content">
                 <div className="stat-value">{weeklyActivity}%</div>
                 <div className="stat-icon activity-icon">📊</div>
               </div>
             </div>
             <div className="stat-card">
-              <div className="stat-header">
-                <div className="stat-title">Tasks Added</div>
-              </div>
+              <div className="stat-header"><div className="stat-title">Tasks Added</div></div>
               <div className="stat-content">
                 <div className="stat-value">{tasks.length}</div>
                 <div className="stat-icon project-icon">📁</div>
@@ -157,12 +164,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Project (all tasks) + To Do (incomplete tasks) */}
+          {/* Task list */}
           <div className="dual-section-grid">
             <div className="section-card">
-              <div className="section-header">
-                <div className="section-title">Projects</div>
-              </div>
+              <div className="section-header"><div className="section-title">Projects</div></div>
               <div className="projects-list">
                 {tasks.map(task => (
                   <div className="project-item" key={task.id}>
@@ -181,6 +186,19 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {currentOverdueTask && (
+        <Toast
+          show={showToast}
+          title="Task Overdue"
+          message={`"${currentOverdueTask.title}" is overdue. Would you like to reschedule it?`}
+          onClose={handleCloseToast}
+          onAction={handleReschedule}
+          actionText="Reschedule +1 Day"
+        />
+      )}
+      <ToastContainer />
     </div>
   );
 };

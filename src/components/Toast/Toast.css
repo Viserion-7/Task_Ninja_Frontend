@@ -1,0 +1,103 @@
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.toast {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.overdue {
+    border-left: 4px solid #dc3545;
+}
+
+.toast-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 12px;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.toast-message {
+    font-size: 13px;
+    color: #666;
+}
+
+.toast-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.toast-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toast-reschedule {
+    background-color: #007bff;
+    color: white;
+}
+
+.toast-reschedule:hover {
+    background-color: #0056b3;
+}
+
+.toast-close {
+    background-color: transparent;
+    color: #666;
+    padding: 4px;
+    margin-left: 8px;
+}
+
+.toast-close:hover {
+    color: #333;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast-exit {
+    animation: slideOut 0.3s ease-in forwards;
+}

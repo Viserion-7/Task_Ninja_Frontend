@@ -57,6 +57,27 @@ const taskService = {
     getSubtasks: async () => {
         const response = await api.get('/subtasks/');
         return response.data;
+    },
+
+    // Reschedule task by adding days
+    rescheduleTask: async (taskId, daysToAdd = 1) => {
+        const task = await api.get(`/tasks/${taskId}/`);
+        const currentDueDate = new Date(task.data.due_date);
+        const newDueDate = new Date(currentDueDate.setDate(currentDueDate.getDate() + daysToAdd));
+        
+        const response = await api.put(`/tasks/${taskId}/`, {
+            ...task.data,
+            due_date: newDueDate.toISOString()
+        });
+        return response.data;
+    },
+
+    // Check if a task is overdue
+    isTaskOverdue: (task) => {
+        if (task.is_completed) return false;
+        const dueDate = new Date(task.due_date);
+        const now = new Date();
+        return dueDate < now;
     }
 };
 
