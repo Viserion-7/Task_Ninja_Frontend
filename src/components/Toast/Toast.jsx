@@ -18,33 +18,31 @@ const Toast = ({ show, title, message, onClose, onAction, actionText }) => {
     if (!show) return null;
 
     return (
-        <div className={`toast overdue ${isExiting ? 'toast-exit' : ''}`}>
-            <div className="toast-content">
-                <div className="toast-title">{title}</div>
-                <div className="toast-message">{message}</div>
-            </div>
-            <div className="toast-actions">
-                {actionText && (
+        <div className="toast-container">
+            <div className={`toast overdue ${isExiting ? 'toast-exit' : ''}`}>
+                <div className="toast-content">
+                    <div className="toast-title">{title}</div>
+                    <div className="toast-message">{message}</div>
+                </div>
+                <div className="toast-actions">
+                    {actionText && (
+                        <button 
+                            className="toast-button toast-reschedule"
+                            onClick={onAction}
+                        >
+                            {actionText}
+                        </button>
+                    )}
                     <button 
-                        className="toast-button toast-reschedule"
-                        onClick={onAction}
+                        className="toast-button toast-close"
+                        onClick={handleClose}
                     >
-                        {actionText}
+                        ✕
                     </button>
-                )}
-                <button 
-                    className="toast-button toast-close"
-                    onClick={handleClose}
-                >
-                    ✕
-                </button>
+                </div>
             </div>
         </div>
     );
 };
 
-const ToastContainer = () => {
-    return <div className="toast-container"></div>;
-};
-
-export { Toast, ToastContainer };
+export { Toast };
