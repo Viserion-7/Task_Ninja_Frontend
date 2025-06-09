@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaRegCheckCircle, FaUndo, FaTimes } from "react-icons/fa";
 import taskService from "../../services/taskService";
 import api from "../../services/api";
@@ -9,25 +9,26 @@ const SubtaskSidebar = ({ isOpen, task, onClose, onSubtaskChange }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  
+  const fetchSubtasks = useCallback(async () => {
+    if (!task) return;
+    try {
+      setLoading(true);
+      const response = await api.get(`/tasks/${task.id}/subtasks/`);
+      setSubtasks(response.data);
+    } catch (err) {
+      setError("Failed to load subtasks");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [task]);
+  
   useEffect(() => {
-    const fetchSubtasks = async () => {
-      if (!task) return;
-      try {
-        setLoading(true);
-        const response = await api.get(`/tasks/${task.id}/subtasks/`);
-        setSubtasks(response.data);
-      } catch (err) {
-        setError("Failed to load subtasks");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (isOpen && task) {
+    if (isOpen && task?.id) {
       fetchSubtasks();
     }
-  }, [isOpen, task]);
+  }, [isOpen, task?.id, fetchSubtasks]);
 
   const handleComplete = async (subtask) => {
     try {
