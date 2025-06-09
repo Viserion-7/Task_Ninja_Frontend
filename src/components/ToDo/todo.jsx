@@ -5,6 +5,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import taskService from '../../services/taskService';
 import { useAuth } from '../../context/AuthContext';
+import SubtaskSidebar from './SubtaskSidebar';
 import './todo.css';
 
 const TodoTasks = () => {
@@ -14,10 +15,11 @@ const TodoTasks = () => {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("priority");
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingTask, setEditingTask] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   // Load tasks from API
   useEffect(() => {
@@ -78,37 +80,9 @@ const TodoTasks = () => {
     }
   };
 
-  const startEditing = (task) => {
-    setEditingTask({
-      ...task,
-      due_date: task.due_date ? new Date(task.due_date).toISOString().split('T')[0] : ''
-    });
-  };
-
-  const saveEdit = async () => {
-    try {
-      // Set time to 9 AM for the selected date
-      const dueDate = new Date(editingTask.due_date);
-      dueDate.setHours(9, 0, 0, 0);
-      
-      const updatedTask = await taskService.updateTask(editingTask.id, {
-        ...editingTask,
-        due_date: dueDate.toISOString()
-      });
-      
-      setTasks(prevTasks => prevTasks.map(task =>
-        task.id === editingTask.id ? updatedTask : task
-      ));
-      
-      setEditingTask(null);
-    } catch (err) {
-      console.error('Error updating task:', err);
-      setError('Failed to update task');
-    }
-  };
-
-  const cancelEdit = () => {
-    setEditingTask(null);
+  const openSubtasks = (task) => {
+    setSelectedTask(task);
+    setSidebarOpen(true);
   };
 
   const getDaysUntilDue = (due_date) => {
@@ -197,7 +171,7 @@ const TodoTasks = () => {
             {task.category_name || "General"}
           </div>
           <div className="task-actions">
-            <button className="action-btn edit" onClick={() => startEditing(task)}><FaEdit /></button>
+            <button className="action-btn edit" onClick={() => openSubtasks(task)}><FaEdit /></button>
             <button className="action-btn complete" onClick={() => toggleComplete(task.id)}><FaCheckCircle /></button>
             <button className="action-btn delete" onClick={() => deleteTask(task.id)}><FaTrashAlt /></button>
           </div>
@@ -321,31 +295,27 @@ const TodoTasks = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
-      {editingTask && (
-        <div className="modal-overlay">
-          <div className="edit-modal">
-            <div className="modal-header">
-              <h3>Edit Task</h3>
-              <button className="close-btn" onClick={cancelEdit}>×</button>
-            </div>
-            <div className="modal-content">
-              <input type="text" value={editingTask.title} onChange={(e) => setEditingTask({ ...editingTask, title: e.target.value })} className="edit-input" placeholder="Task Title" />
-              <textarea value={editingTask.description} onChange={(e) => setEditingTask({ ...editingTask, description: e.target.value })} className="edit-textarea" placeholder="Task Description" />
-              <input type="date" value={editingTask.due_date} onChange={(e) => setEditingTask({ ...editingTask, due_date: e.target.value })} className="edit-input" />
-              <select value={editingTask.priority} onChange={(e) => setEditingTask({ ...editingTask, priority: e.target.value })} className="edit-select">
-                <option value="Low">Low</option>
-                <option value="Normal">Normal</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={cancelEdit}>Cancel</button>
-              <button className="save-btn" onClick={saveEdit}>Save Changes</button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Subtask Sidebar */}
+      <SubtaskSidebar
+        isOpen={sidebarOpen}
+        task={selectedTask}
+        onClose={() => {
+          setSidebarOpen(false);
+          setSelectedTask(null);
+        }}
+        onSubtaskChange={() => {
+          const fetchTasks = async () => {
+            try {
+              const tasksData = await taskService.getAllTasks();
+              setTasks(tasksData);
+            } catch (err) {
+              console.error('Error fetching tasks:', err);
+              setError('Failed to load tasks');
+            }
+          };
+          fetchTasks();
+        }}
+      />
     </div>
   );
 };

@@ -53,9 +53,31 @@ const taskService = {
         return response.data;
     },
 
-    // Get all subtasks
-    getSubtasks: async () => {
-        const response = await api.get('/subtasks/');
+    // Get subtasks for a task
+    getSubtasks: async (taskId) => {
+        const response = await api.get(`/tasks/${taskId}/subtasks/`);
+        return response.data;
+    },
+
+    // Update subtask
+    updateSubtask: async (subtaskId, subtaskData) => {
+        const response = await api.put(`/subtasks/${subtaskId}/`, {
+            ...subtaskData,
+            minutes: parseInt(subtaskData.minutes) || 30
+        });
+        return response.data;
+    },
+
+    // Delete subtask
+    deleteSubtask: async (subtaskId) => {
+        await api.delete(`/subtasks/${subtaskId}/`);
+    },
+
+    // Complete subtask
+    completeSubtask: async (subtaskId) => {
+        const response = await api.put(`/subtasks/${subtaskId}/`, {
+            is_completed: true
+        });
         return response.data;
     },
 
