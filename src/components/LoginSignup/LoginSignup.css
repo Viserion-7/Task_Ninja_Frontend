@@ -1,138 +1,143 @@
 /* General Layout */
 .login-signup-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-  }
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
 /* Gradient Background */
 body {
-    background: linear-gradient(to right, #003366, #004080, #0059b3, #0073e6);
-    position: relative;
-    margin: 0;
-    height: 100vh;
-    overflow: hidden;
+  background: linear-gradient(to right, #003366, #004080, #0059b3, #0073e6);
+  position: relative;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 
-  /* Left Image Section */
-  .image-section {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .image-section img {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  /* Right Form Section */
-  .form-section {
-    flex: 1;
-    margin-right: 20px;
-    max-width: 400px;
-    background: rgba(200, 182, 255, 0.8); /* Adjust the alpha value (0.8) as needed */
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+/* Left Image Section */
+.image-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-  
-  /* Title */
-  .title-text {
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 20px;
+
+.image-section img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Right Form Section */
+.form-section {
+  flex: 1;
+  margin-right: 20px;
+  max-width: 400px;
+  background: rgba(
+    200,
+    182,
+    255,
+    0.8
+  ); /* Adjust the alpha value (0.8) as needed */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.title-text {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Slide Controls */
+.slide-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.slide {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.slide.active {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Form Fields */
+.form-inner .field {
+  margin-bottom: 15px;
+}
+
+.form-inner input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Forgot Password Link */
+.pass-link {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.pass-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Submit Button */
+.field.btn input {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.field.btn input:hover {
+  background-color: #0056b3;
+}
+
+/* Signup Link */
+.signup-link {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-signup-container {
+    flex-direction: column;
   }
-  
-  /* Slide Controls */
-  .slide-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+
+  .image-section {
+    display: none;
   }
-  
-  .slide {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.3s;
+
+  .form-section {
+    max-width: 90%;
   }
-  
-  .slide.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  /* Form Fields */
-  .form-inner .field {
-    margin-bottom: 15px;
-  }
-  
-  .form-inner input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  /* Forgot Password Link */
-  .pass-link {
-    text-align: right;
-    margin-bottom: 10px;
-  }
-  
-  .pass-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  /* Submit Button */
-  .field.btn input {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .field.btn input:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Signup Link */
-  .signup-link {
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  .signup-link a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .login-signup-container {
-      flex-direction: column;
-    }
-  
-    .image-section {
-      display: none;
-    }
-  
-    .form-section {
-      max-width: 90%;
-    }
-  }
+}

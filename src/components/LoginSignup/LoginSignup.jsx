@@ -14,7 +14,7 @@ const LoginSignup = () => {
   const navigate = useNavigate();
 
   const { login: authLogin } = useAuth();
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -25,7 +25,9 @@ const LoginSignup = () => {
       authLogin(userData);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid credentials. Please try again.");
+      setError(
+        err.response?.data?.error || "Invalid credentials. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -45,7 +47,7 @@ const LoginSignup = () => {
     try {
       // Register the user
       await register(username, email, password);
-      
+
       // Log them in automatically
       const userData = await login(username, password);
       authLogin(userData);
@@ -78,8 +80,18 @@ const LoginSignup = () => {
           </div>
 
           <div className="slide-controls">
-            <button className={`slide ${!isSignup ? "active" : ""}`} onClick={() => setIsSignup(false)}>Login</button>
-            <button className={`slide ${isSignup ? "active" : ""}`} onClick={() => setIsSignup(true)}>Signup</button>
+            <button
+              className={`slide ${!isSignup ? "active" : ""}`}
+              onClick={() => setIsSignup(false)}
+            >
+              Login
+            </button>
+            <button
+              className={`slide ${isSignup ? "active" : ""}`}
+              onClick={() => setIsSignup(true)}
+            >
+              Signup
+            </button>
           </div>
 
           <div className="form-inner">
@@ -106,18 +118,21 @@ const LoginSignup = () => {
                 </div>
                 <div className="pass-link">
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a href="#">Forgot password?</a></div>
+                  <a href="#">Forgot password?</a>
+                </div>
                 <div className="field btn">
-                  <input 
-                    type="submit" 
-                    value={loading ? "Loading..." : "Login"} 
+                  <input
+                    type="submit"
+                    value={loading ? "Loading..." : "Login"}
                     disabled={loading}
                   />
                 </div>
                 <div className="signup-link">
-                  Not a member? 
+                  Not a member?
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  <a href="#" onClick={() => setIsSignup(true)}>Signup now</a>
+                  <a href="#" onClick={() => setIsSignup(true)}>
+                    Signup now
+                  </a>
                 </div>
               </form>
             ) : (
@@ -157,9 +172,9 @@ const LoginSignup = () => {
                   />
                 </div>
                 <div className="field btn">
-                  <input 
-                    type="submit" 
-                    value={loading ? "Loading..." : "Signup"} 
+                  <input
+                    type="submit"
+                    value={loading ? "Loading..." : "Signup"}
                     disabled={loading}
                   />
                 </div>

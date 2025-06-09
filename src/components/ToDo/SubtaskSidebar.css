@@ -1,147 +1,147 @@
 .subtask-sidebar {
-    position: fixed;
-    right: -400px;
-    top: 0;
-    width: 400px;
-    height: 100vh;
-    background: white;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
-    z-index: 1000;
-    padding: 20px;
-    overflow-y: auto;
+  position: fixed;
+  right: -400px;
+  top: 0;
+  width: 400px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
+  z-index: 1000;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .subtask-sidebar.open {
-    right: 0;
+  right: 0;
 }
 
 .subtask-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .subtask-header h2 {
-    margin: 0;
-    font-size: 1.2em;
-    color: #333;
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
 }
 
 .close-sidebar {
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #666;
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
 }
 
 .close-sidebar:hover {
-    color: #333;
+  color: #333;
 }
 
 .subtask-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .subtask-item {
-    background: #f8f9fa;
-    border-radius: 6px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .subtask-content {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .subtask-title {
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 4px;
+  font-size: 0.9em;
+  color: #333;
+  margin-bottom: 4px;
 }
 
 .subtask-duration {
-    font-size: 0.8em;
-    color: #666;
+  font-size: 0.8em;
+  color: #666;
 }
 
 .subtask-actions {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .subtask-btn {
-    padding: 6px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #666;
-    border-radius: 4px;
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #666;
+  border-radius: 4px;
 }
 
 .subtask-btn:hover {
-    background: #eee;
+  background: #eee;
 }
 
 .subtask-btn.complete {
-    color: #28a745;
+  color: #28a745;
 }
 
 .subtask-btn.edit {
-    color: #007bff;
+  color: #007bff;
 }
 
 .subtask-item.completed {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .subtask-item.completed .subtask-title {
-    text-decoration: line-through;
+  text-decoration: line-through;
 }
 
 .subtask-edit-form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: white;
-    padding: 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .subtask-edit-form input {
-    flex-grow: 1;
-    padding: 6px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  flex-grow: 1;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .subtask-edit-form input[type="number"] {
-    width: 80px;
+  width: 80px;
 }
 
 .subtask-edit-form button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .subtask-edit-form .save-btn {
-    background: #28a745;
-    color: white;
+  background: #28a745;
+  color: white;
 }
 
 .subtask-edit-form .cancel-btn {
-    background: #dc3545;
-    color: white;
+  background: #dc3545;
+  color: white;
 }

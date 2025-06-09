@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .app-container {
@@ -542,7 +542,8 @@
   color: #6c757d;
 }
 
-.member-today-hours, .member-week-hours {
+.member-today-hours,
+.member-week-hours {
   font-weight: 500;
 }
 
