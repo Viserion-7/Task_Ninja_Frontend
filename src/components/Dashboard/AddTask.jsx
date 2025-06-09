@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import taskService from "../../services/taskService";
 import aiService from "../../services/aiService";
+import ConflictModal from "../ConflictModal/ConflictModal";
 import "./AddTask.css";
 
 const AddTask = () => {
@@ -12,6 +13,8 @@ const AddTask = () => {
   const [error, setError] = useState("");
   const [generatingSubtasks, setGeneratingSubtasks] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [showConflictModal, setShowConflictModal] = useState(false);
+  const [hasConflict, setHasConflict] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -45,6 +48,21 @@ const AddTask = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const checkConflicts = async () => {
+    if (!formData.due_date) {
+      setError("Please select a due date first");
+      return;
+    }
+
+    try {
+      const conflict = await taskService.checkConflicts(formData.due_date);
+      setHasConflict(conflict);
+      setShowConflictModal(true);
+    } catch (err) {
+      setError("Failed to check for conflicts");
+    }
   };
 
   const generateSubtasks = async () => {
@@ -100,9 +118,7 @@ const AddTask = () => {
       // Create each subtask with the task ID
       if (subtasks.length > 0) {
         const subtaskPromises = subtasks.map((subtask) => {
-          // Ensure duration is a number and valid
-          const duration =
-            typeof subtask.duration === "number" ? subtask.duration : 30;
+          const duration = typeof subtask.duration === "number" ? subtask.duration : 30;
           return taskService.createSubtask(taskId, {
             title: subtask.title,
             duration: duration,
@@ -149,7 +165,7 @@ const AddTask = () => {
           </div>
           <div className="nav-item">
             <span className="nav-icon">👨🏻‍💼</span>
-            <span className="nav-text">Profile</span>
+            <button className="nav-text" onClick={() => navigate("/profile")}>Profile</button>
           </div>
         </div>
         <div className="sidebar-actions">
@@ -197,6 +213,14 @@ const AddTask = () => {
                   onChange={handleInputChange}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={checkConflicts}
+                  className="check-conflicts-btn"
+                  disabled={!formData.due_date}
+                >
+                  Check for Conflicts
+                </button>
               </div>
 
               <div className="form-group">
@@ -303,6 +327,21 @@ const AddTask = () => {
           </form>
         </div>
       </div>
+
+      {/* Conflict Modal */}
+      <ConflictModal
+        isOpen={showConflictModal}
+        hasConflict={hasConflict}
+        onClose={() => setShowConflictModal(false)}
+        onKeepDate={() => setShowConflictModal(false)}
+        onReschedule={() => {
+          setShowConflictModal(false);
+          setFormData(prev => ({
+            ...prev,
+            due_date: ''
+          }));
+        }}
+      />
     </div>
   );
 };

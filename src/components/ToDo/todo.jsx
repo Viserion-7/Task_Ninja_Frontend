@@ -19,7 +19,6 @@ const TodoTasks = () => {
   const { logout } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("priority");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
@@ -144,19 +143,6 @@ const TodoTasks = () => {
       });
     } else if (filter === "high-priority") {
       filtered = filtered.filter((t) => t.priority === "High");
-    }
-
-    if (sortBy === "priority") {
-      const order = { High: 1, Normal: 2, Low: 3 };
-      filtered.sort((a, b) => order[a.priority] - order[b.priority]);
-    } else if (sortBy === "due-date") {
-      filtered.sort((a, b) => {
-        if (!a.due_date) return 1;
-        if (!b.due_date) return -1;
-        return new Date(a.due_date) - new Date(b.due_date);
-      });
-    } else {
-      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
     return filtered;
@@ -381,15 +367,6 @@ const TodoTasks = () => {
                 )
               )}
             </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="sort-select"
-            >
-              <option value="priority">Sort by Priority</option>
-              <option value="due-date">Sort by Due Date</option>
-              <option value="created">Sort by Created</option>
-            </select>
           </div>
         </div>
 
