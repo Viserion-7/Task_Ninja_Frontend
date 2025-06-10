@@ -1,6 +1,7 @@
 # TaskNinja Frontend
 
 React-based frontend for TaskNinja, an AI-powered task management application.
+[Link to Backend Repo](https://github.com/Viserion-7/Task_Ninja_Backend)
 
 ## Features
 
