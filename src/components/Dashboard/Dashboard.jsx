@@ -19,23 +19,23 @@ const Dashboard = () => {
     fetchTasks();
   }, []);
 
+  // Update overdue tasks list when tasks change
   useEffect(() => {
     if (tasks.length > 0) {
       const overdueList = tasks.filter(
         (task) => taskService.isTaskOverdue(task) && !task.is_completed
       );
       setOverdueTasks(overdueList);
-
-      // Only show if we have a new overdue task
-      if (
-        overdueList.length > 0 &&
-        (!currentOverdueTask || currentOverdueTask.id !== overdueList[0].id)
-      ) {
-        setCurrentOverdueTask(overdueList[0]);
-        setShowToast(true);
-      }
     }
-  }, [tasks, currentOverdueTask]);
+  }, [tasks]);
+
+  // Handle showing toast for overdue tasks
+  useEffect(() => {
+    if (overdueTasks.length > 0 && !currentOverdueTask) {
+      setCurrentOverdueTask(overdueTasks[0]);
+      setShowToast(true);
+    }
+  }, [overdueTasks, currentOverdueTask]);
 
   const fetchTasks = async () => {
     try {
@@ -54,22 +54,24 @@ const Dashboard = () => {
     try {
       await taskService.rescheduleTask(currentOverdueTask.id);
 
+      // Update tasks list without fetching
+      const updatedTasks = tasks.map(task => 
+        task.id === currentOverdueTask.id 
+          ? { ...task, due_date: new Date(new Date(task.due_date).getTime() + 24 * 60 * 60 * 1000).toISOString() }
+          : task
+      );
+      setTasks(updatedTasks);
+
       // Remove current task from overdue list
       const updatedOverdue = overdueTasks.filter(
         (task) => task.id !== currentOverdueTask.id
       );
       setOverdueTasks(updatedOverdue);
 
-      // Show next overdue task if exists
-      if (updatedOverdue.length > 0) {
-        setCurrentOverdueTask(updatedOverdue[0]);
-      } else {
-        setCurrentOverdueTask(null);
-        setShowToast(false);
-      }
+      // Clear current overdue task
+      setCurrentOverdueTask(null);
+      setShowToast(false);
 
-      // Refresh tasks
-      fetchTasks();
     } catch (err) {
       setError("Failed to reschedule task");
     }
@@ -155,7 +157,15 @@ const Dashboard = () => {
                     <div className="project-icon">📁</div>
                     <div className="project-name">{task.title}</div>
                     <div className="project-time">
-                      {task.due_date || "No due date"}
+                      {task.due_date 
+                        ? new Date(task.due_date).toLocaleString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                        : "No due date"}
                     </div>
                     <div className="project-progress">
                       <div className="progress-bar">
